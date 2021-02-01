@@ -166,11 +166,21 @@ Via `regedit` kan je ook (delen van) de registry *exporteren* naar een .reg-best
 
 Dit bestand terug importeren in de registry kan door er eenvoudigweg op te dubbelklikken. Als de gebruiker bovenstaand bestand importeert, dan zal de standaard toetsenbordlayout dus op English (United States) gezet worden.
 
+## Remote Access
+
+Domeinbeheerders hoeven niet altijd rechtstreeks in te loggen op de domein controller om aanpassingen te maken aan de Active Directory instellingen. Men kan vanop eender welke pc het beheer van het domein doen, als men de [Remote Server Administration Tools (RSAT)](https://www.microsoft.com/en-us/download/details.aspx?id=45520) downloadt.
+
+Log in op de Windows 10-machine als de domeinbeheerder. Let op, standaard word je op de Windows 10-machine ingelogd als een gebruiker van het domein, tenzij er een lokale account bestaat met dezelfde naam. Als je nu inlogt als ‘Administrator’ zal je dus ingelogd worden als de lokale beheerder (d.i. de account die we gebruikten voordat de Windows 10 client toegevoegd was aan het domein) in plaats van de domeinbeheerder. Om te forceren dat we aanmelden met de domeinbeheerder, moeten we de naam van het domein dus toevoegen aan de loginnaam. Dit kan op volgende manier: Administrator@cosci.be
+
+Installeer de RSA-tools; dit duurt even. Na de installatie kan je in het start menu gaan naar Windows Administrative Tools, waar je nu de vertrouwde Active Directory instellingen kan vinden. Open bijvoorbeeld Active Directory Users and Computers en verifieer dat alles werkt.
+
+> NOTE: Als de installatie van RSAT niet wil starten, controleer dan of het bestand niet geblokkeerd is. Wanneer je bepaalde bestanden over het netwerk kopieert, kan Windows uit veiligheidsoverwegingen de toegang tot het bestand blokkeren totdat je expliciet het bestand deblokkeert. Rechterklik op het bestand en controleer of er onderaan de General-tab staat dat het bestand geblokkeerd is. Indien dat het geval is, deblokkeer het bestand en dan zal de installatie succesvol opstarten.
+
 ## Oefeningen
 
 ### Beperk toegang tot het configuratiescherm & Command Line
 
-Gewone gebruikers mogen geen toegang hebben tot het configuratiepaneel en command line. Dit is enkel toegelaten voor gebruikers in de OU=ICT.
+Gewone gebruikers mogen geen toegang hebben tot het configuratiepaneel en command line. Dit is enkel toegelaten voor gebruikers in de OU=IT.
 
 ### Verbied het gebruik van USB-sticks, CDs, DVDs en andere verwijderbare media
 
@@ -182,7 +192,7 @@ Door het gastaccount kunnen gebruikers toegang krijgen tot gevoelige data. Zo'n 
 
 ### Verhinder automatische driver-updates
 
-Windows voert automatisch een heleboel updates uit, ook device drivers updates. In de OU=ICT gebruikt men echter custom drivers die niet geüpdatet mogen worden.
+Windows voert automatisch een heleboel updates uit, ook device drivers updates. In de OU=IT gebruikt men echter custom drivers die niet geüpdatet mogen worden.
 
 ### Snelkoppeling cosci.be
 
@@ -192,20 +202,19 @@ Plaats bij alle gebruikers op het bureaublad een snelkoppeling naar Cosci.be
 
 Zorg dat iedere keer dat er iemand aanmeldt op een PC in het domein, de gebruikersnaam en aanlogtijd naar een tekstbestand op de PC worden weggeschreven.
 
-- TODO Check shared folders
 ### Installeer van programma's (op alle pc's)
 
-Standaard hebben domeingebruikers geen rechten om programma’s te installeren op een pc. Vaak wil men echter toch kunnen toelaten dat de gebruiker bepaalde software kan installeren, zonder hem toe te laten om eender welke software te installeren. Ook hier kunnen GPO's gebruikt worden om in te stellen welke programma’s de gebruikers mag installeren op een client-pc.
+Standaard hebben domeingebruikers geen rechten om programma’s te installeren op een pc. Vaak wil men echter toch kunnen toelaten dat de gebruiker bepaalde software kan installeren, zonder hem toe te laten om eender welke software te installeren. Ook hier kunnen GPO's gebruikt worden om in te stellen welke programma’s de gebruikers mag installeren op een cliënt-pc.
 
 Als voorbeeld nemen we de installatie van 7-zip. Downloadt dit *msi-bestand* op de cliënt-PC en start het setup-bestand. Volg de setup wizard (laat de standaard waardes telkens ongemoeid) en blijf doorklikken tot de installatie daadwerkelijk begint. Op dat moment zal je een loginvenster krijgen waarin je je moet aanmelden als een administrator. Dit komt omdat het setup-programma aanpassingen moet maken die voor normale gebruikers niet toegelaten zijn (bijv. het kopiëren van bestanden naar C:\Program Files).
 
-Open nu het groepsbeleidsbeheer op de domain controller, en maak een nieuwe GPO onder de OU=ICT met de naam “Software installeren”. Bewerk de GPO en ga naar User Configuration, Policies, Software Settings, Software installation. Rechterklik, en kies New, Package. Als bestandsnaam vul je het pad naar het gedeelde bestand in (bijv. \\VMware-host\7z1801-x64.msi). Klik op Open.
+Open nu het groepsbeleidsbeheer op de domain controller, en maak een nieuwe GPO onder de OU=IT met de naam “Software installeren”. Bewerk de GPO en ga naar User Configuration, Policies, Software Settings, Software installation. Rechterklik, en kies New, Package. Als bestandsnaam vul je het pad naar het gedeelde bestand in (bijv. \\VMware-host\7z1801-x64.msi). Klik op Open.
 
 In het volgende scherm krijg je de keuze hoe je de software wil distribueren. Standaard staat **Published** geselecteerd, wat wil zeggen dat de gebruiker kan kiezen of hij de software wil installeren of niet. De optie **Assigned** betekent dat de gebruiker niet kan kiezen, en dat de software automatisch geïnstalleerd wordt. Kies Published en klik OK. Sluit de groepsbeleidsbeheer editor af.
 
-Log in op de Windows 10-machine als een gebruiker in de OU=ICT. Ga via het Control Panel naar Programs, Programs and Features, Install a program from the network. In deze lijst zie je nu het programma 7-zip staan en kan je het zonder probleem installeren (ook zonder beheerdersrechten).
+Log in op de Windows 10-machine als een gebruiker in de OU=IT. Ga via het Control Panel naar Programs, Programs and Features, Install a program from the network. In deze lijst zie je nu het programma 7-zip staan en kan je het zonder probleem installeren (ook zonder beheerdersrechten).
 
-Installeer het msi-bestand dat je voor dit labo op Toledo terug kan vinden. Hiervoor zal je een netwerk-share nodig hebben. Het gemakkelijkste hiervoor is om een shared folder in VirtualBox aan te maken en deze aan beide VM's te koppelen eventueel door *map network drive* in `This PC`.
+Installeer het msi-bestand dat je voor dit labo op Toledo terug kan vinden. Hiervoor zal je een netwerk-share nodig hebben. Het gemakkelijkste hiervoor is om een shared folder in VMWare aan te maken en deze aan beide VM's te koppelen eventueel door *map network drive* in `This PC`.
 
 ### Delegatie
 
@@ -217,7 +226,7 @@ Log op de Windows 10-machine in als een gebruiker in de groep IT-admins en ga vi
 
 ### Overname blokkeren of niet
 
-In een GPO kan "Block inheritance" ingesteld worden. Hierdoor worden de instellingen van een hoger niveau NIET toegepast, we beginnen weer met een “schone lei”. Hierop is evenwel één uitzondering: op een (ouder-)GPO kan ook “Enforced” gespecifieerd worden. Het gevolg is dan dat de instellingen lager in de hiërarchie (ook indien er een "Block inheritance" tussen staat) niet meer van toepassing zijn.
+In een GPO kan "Block inheritance" ingesteld worden. Hierdoor worden de instellingen van een hoger niveau NIET toegepast, we beginnen weer met een “schone lei”. Hierop is evenwel één uitzondering: op een (ouder-)GPO kan ook “Enforced” gespecifieerd worden. Het gevolg is dan dat de instellingen lager in de hiërarchie (ook indien er een "Block inheritance" tussen staat) niet meer  van toepassing zijn.
 
 Maak zelf een demo-oefening om dit te testen/demonstreren. Tip: Remove Recycle Bin icon from Desktop.
 
@@ -232,5 +241,6 @@ Maak zelf een demo-oefening om dit te testen/demonstreren. Tip: Remove Recycle B
 * Je kan uitzoeken waarom een beleidsregel (policy/preference) niet toegepast is voor een gebruiker/computer (toepassen, analyseren)
 * Je weet en kan het verschil uitleggen tussen de twee delen waaruit een GPO bestaat *Computer Configuration* en *User Configuration* (onthouden)
 * Je kan de tools gpresult en gpupdate gebruiken (toepassen)
+* Je kan de RSAT-tools installeren op een Windows 10 machine en deze tools ook correct gebruiken (als administrator of via delegatie) (begrijpen, toepassen)
 * Je kan eenvoudige taken binnen "AD Users en Computers" delegeren naar een AD-gebruiker of een AD-groep (begrijpen, toepassen)
 * Je kent het concepte "Block inheritance" bij een GPO, kan dat uitleggen en toepassen aan de hand van een concreet voorbeeld (toepassen, analyseren)

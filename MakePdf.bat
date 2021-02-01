@@ -1,0 +1,1 @@
+md-to-pdf Lab1.md --config-file config.js

@@ -10,7 +10,7 @@ Vanaf we 2 DC's hebben op het domain kunnen we de informatie op beide servers ge
 
 ### ServerBU - COSCIDC2
 
-Hiervoor ga je eerst je ServerBU machine moet opzetten en instellen. 
+Hiervoor ga je eerst je ServerBU machine moet opzetten en instellen.
 
 Eerst en vooral gaan we de server een logische naam geven. Open **Server Manager** en ga naar **Local Server**. Klik op de computernaam, vervolgens op 'Change...'. Geef de server de naam 'COSCIDC2'. Om die wijzigingen door te voeren moet je de server opnieuw opstarten.
 
@@ -39,13 +39,14 @@ De volgende stap is om van COSCIDC2 een domain controller te maken door ADDS ero
 
 Vanaf nu heb je 2 Domain Controllers op je netwerk die ADDS en DNS naar elkaar repliceren.
 
-Kijk na of het replicatie proces werkt. COSCIDC2 zou nu ook de user Test en de groep System Administrators moeten hebben overgenomen. 
+Kijk na of het replicatie proces werkt. COSCIDC2 zou nu ook de user Test en de groep System Administrators moeten hebben overgenomen.
 
 Maak nu een nieuwe user aan op COSCIDC2 en kijk of deze repliceerd naar COSCID1. Maak ook een nieuwe user aan op COSCIDC1 en kijk of deze repliceerd naar COSCID2. Dit kan tot 20 seconden duren voordat deze aanpassingen doorkomen.
 
 Als COSCIDC2 niet repliceerd naar COSCIDC1 wilt dit zeggen dat COSCIDC1 COSCIDC2 niet kan vinden. Waarschijnlijk is dit omdat je de sharingoptions nog niet goed hebt gezet. Zorg ervoor dat beide servers discoverable zijn op het netwerk en maak aanpassingen aan de user om nog eens het replicatie process te triggeren.
 
-TODO: Zet nu COSCIDC1 af en kijk of je met je Windows 10 machine nog steeds kan inloggen op COSCI.
+- TODO test dit
+Zet nu COSCIDC1 af en kijk of je met je Windows 10 machine nog steeds kan inloggen op COSCI.
 
 ## Trees en forests
 
@@ -58,45 +59,50 @@ Alle resources (PC's, Users, ...) die in een van de subdomeinen worden toegevoeg
 Daarnaast is het ook mogelijk om verschillende trees van verschillende domeinen aan elkaar te koppelen via een trust. Stel bijvoorbeeld dat `blue.com` beslist te gaan samenwerken met `red.com`, dan kan men een trust tussen de 2 trees leggen, waardoor de resources van de ene tree "gekend zijn" in de andere tree. Zo gaan gebruikers van `blue.com` zich zelfs in de gebouwen van `red.com` kunnen aanmelden op de PC's. Voor meer info over design van een Active Directory, lees je dit [artikel](https://mcpmag.com/articles/2010/09/29/ad-design-know-your-domains.aspx).
 
 ## Organizational units & groups
+
 Wat echter veel meer voorkomt zijn **organizational units & groups**.
 
 ### Organizational Units
+
 Deze reflecteren vaak de structuur van de organisatie, bijvoorbeeld de OU "Werknemers", waaronder dan de OU "HR", de OU "Sales" en de OU "Engineering" terug te vinden zijn. Ze werken van een grote groep, naar steeds specifiekere groepjes, in een omgekeerd hiërarchisch model. OU's erven altijd de rechten en configuratie over van hun parent, maar kunnen verder gespecificeerd worden. **Ze worden vooral gebruikt om Group Policies op te configureren**. Een gebruiker kan ook maar in 1 van de OU's zitten, en heeft dus alleen effect van de OU waar hij in zit en degene die erboven liggen.
 
 ### Groepen
+
 Deze hebben minder sterk die hiërarchie, en dienen vooral voor het rechten geven op bepaalde bedrijfsresources (Printers, Mailboxen, ...). Een gebruiker kan wel in meerdere groepen zitten. Ook kunnen groepen genest worden, simpelweg door een groep lid te maken van een andere groep. Alle leden zullen bijgevolg ook door de configuratie van die groep beïnvloed worden.
 
-# User Oefeningen
+## User Oefeningen
 
-## Guest & Administrator
+### Guest & Administrator
 
-Als eerste gaan we 2 Users aanpassen. De guest en administrator users. 
+Als eerste gaan we 2 Users aanpassen. De guest en administrator users.
 
-Guest is een account die automatisch in ADDS zit als je dit voor het eerst installeerd. Deze is bedoeld om gebruikers zonder login toch te kunnen laten inloggen op het systeem met minimale rechten. Op onze hogeschool willen we geen guest account. Maar we willen wel de setup van de guest account bijhouden indien we deze ooit terug willen gebruiken. Daarom verwijderen de user niet, maar zetten we het account op disabled.
+Guest is een account die automatisch in ADDS zit als je dit voor het eerst installeerd. Deze is bedoeld om gebruikers zonder login toch te kunnen laten inloggen op het systeem met minimale rechten. Op onze hogeschool willen we wel een guest account. Hier moeten we het guest account zetten op enabled.
 
-Administrator is het omgekeerde van een guest account, dit account heeft alle rechten op het domain en kan overal inloggen. Daarom staan hier vaak ook policies op om bijvoorbeeld paswoorden tijdig te moeten vernieuwen. Als voorbeeld willen we in de hogeschool niet telkens ons paswoord vernieuwen, dus gaan we de expiration date van ons paswoord aanpassen. Op de werkvloer is dit uiteraard een heel slecht idee om te doen.
+Administrator is het omgekeerde van een guest account, dit account heeft alle rechten op het domain en kan overal inloggen. Daarom staan hier vaak ook policies op om bijvoorbeeld paswoorden tijdig te moeten vernieuwen. Als voorbeeld willen we in de hogeschool het paswoord van Administator tijdig vernieuwen, dus gaan we de expiration date van ons paswoord aanpassen.
 
-Zet nu de guest account op disabled en pas de expiration date aan van het administrator account.
+Zet nu de guest account op enabled en zet de paswoord expiration van het administrator account aan.
 
-## Other Users - TODO
+Kijk na of je nog kan inloggen met het guest account.
 
-Maak users en geef deze de volgende zaken:
-- Maak enkele users aan zoals bob en xtoledo
-- xtoledo zonder password expiry
-- Password reset
-- Telefoon nummer en adres
-- Pas de login aan
-- Login hours
-- Job titles en meer
-- Startup program
+### Other Users
 
-# Organizational Units en Groepen Oefeningen - TODO: Change scheme?
+Het volgende dat we doen is 2 users aanmaken: Bob Jansens en xtoledo. Bob Jansens is een interim lector bij cosci. xtoledo is een account waarmee studenten hun examens mee kunnen afleggen.
+
+Maak beide users aan. Zorg ervoor dat xtoledo geen paswoord expiration heeft en niet aangepast kan worden en dat Bob zijn paswoord moeten zetten op de volgende login.
+
+- Geef Bob een job title van `Interim Lecturer` in de afdeling `Teaching` bij het bedrijf `Cosci`.
+- Vul het telefoon nummer an adres in van Bob Jansens.
+- Pas de login aan van Bob zodat hij inlogd met bob2@cosci.be want we hebben al een andere Bob bij cosci.
+- Zet de logon hours van Bob zodat hij enkel kan inloggen tussen 7u en 18u en dit enkel van maandag to vrijdag.
+- Zorg ervoor dat het account van Bob expires op 31 augustus, vanwege dat dan zijn contract dan stopt bij Cosci.
+
+## Organizational Units en Groepen Oefeningen
 
 Probeer nu op de root van het domein de volgende structuur aan te maken met behulp van OU's.
 
-![ou](images/cosci_OU.png)
+![ou](images/OUOrganigram.png)
 
-> NOTE: Ga naar *Group Policy Management* onder Windows Administrative Tools, selecteer het domein "cosci.be" en verifieer dat deze structuur nu ook daar aanwezig is. 
+> NOTE: Ga naar *Group Policy Management* onder Windows Administrative Tools, selecteer het domein "cosci.be" en verifieer dat deze structuur nu ook daar aanwezig is.
 
 Maak daarnaast in de OU=Users ook de volgende groepen aan.
 
@@ -107,14 +113,15 @@ Maak daarnaast in de OU=Users ook de volgende groepen aan.
 
 En voeg IT-Admins als een groep toe aan Wifi-users. Voeg jezelf ook toe aan de IT-admins groep en controleer of je daarmee ook toegevoegd bent aan de Wifi-users groep.
 
-## Organizational Units Locaties
+### Organizational Units Locaties
 
-De hoofdlocatie van de hogeschool Cosci is gelegen in Brussel. Kies een adres in Brussel en configureer de Organizational Units Sales en HR zodat zij zich bevinden op deze locatie.
+De hoofdlocatie van de hogeschool Cosci is gelegen in Brussel. Kies een adres in Brussel en configureer de Organizational Units HR, ICT en Lectoren zodat zij zich bevinden op deze locatie.
 
-De engineering department bevind zich echter niet op de hoofdlocatie maar bevind zich in Noord-Mechelen. Configureer de Organizational Unit Engineering zodat deze zich bevind in Noord-Mechelen. Maak ook een user Marc aan en maak Marc het hoofd in Engineering. 
+De research & expertise department bevind zich echter niet op de hoofdlocatie maar bevind zich in Noord-Mechelen. Configureer de Organizational Unit Research & Expertise zodat deze zich bevind in Noord-Mechelen. Maak ook een user Marc aan en maak Marc het hoofd in Research.
 
-# Wat moet je na dit labo minstens kennen/kunnen
-* Je weet en kan aan de hand van een duidelijk schema uitleggen wat een domein tree en domein forest is (onthouden, begrijpen)
-* Je kan de eigenschappen van gebruikers en groepen binnen AD DS aanpassen (begrijpen, toepassen)
-* Je weet en kan uitleggen wat een OU is (onthouden, begrijpen)
-* Je kan OU's aanmaken in AD DS (toepssen)
+## Wat moet je na dit labo minstens kennen/kunnen
+
+- Je weet en kan aan de hand van een duidelijk schema uitleggen wat een domein tree en domein forest is (onthouden, begrijpen)
+- Je kan de eigenschappen van gebruikers en groepen binnen AD DS aanpassen (begrijpen, toepassen)
+- Je weet en kan uitleggen wat een OU is (onthouden, begrijpen)
+- Je kan OU's aanmaken in AD DS (toepssen)
