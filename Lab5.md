@@ -64,9 +64,9 @@ DHCP werkt volledig bovenop UDP want:
 
 ## DHCP in Active Directory
 
-We gaan nu een DHCP installeren op COSCIDC1. Voordat we hieraan beginnen moet je de DHCP server uitzetten van het host-only netwerk van VirtualBox.
+We gaan nu een DHCP installeren op COSCIDC1. Voordat we hieraan beginnen moet je de DHCP server uitzetten van het host-only netwerk van VirtualBox. Je kan deze uitzetten onder `File > Host Network Manager ...`
 
-> Je kan deze uitzetten onder `File > Host Network Manager ...`
+> Net zoals in een vorig lab worden deze DCHP server aanpassingen in VirtualBox niet meteen doorgevoerd. Je zal dus terug in Taakbeheer alle `VirtualBox DHCP Server` processen moeten uitschakelen.
 
 ### DHCP Installatie
 
@@ -179,7 +179,7 @@ Om snel DHCP te kunnen troubleshooten kan je gebruiken maken van de commando's `
 
 Start je Windows 10 VM op en en ping naar `127.0.0.1`, indien dit mislukt zullen de TCP/IP waarschijnlijk fout staan. Kijk ook `ipconfig /all` na, hierin kan je alle settings vinden, verder kan je met `ipconfig` ook acties gebruiken als `release` en `renew` indien nodig.
 
-Normaal heeft je machine nu een adres gekregen vanuit de scope. Kijk ook eens na of in de scope nu het uitgeleende adres voorkomt. Deze kan uitgeleend zijn door één van de servers, kijk dus in beide.
+Normaal heeft je machine nu een adres gekregen vanuit de scope. Kijk na of deze nu ook in de scope voorkomt onder leases. Deze kan uitgeleend zijn door één van de servers, kijk dus in beide.
 
 ## Wat moet je na dit labo kennen/kunnen
 
