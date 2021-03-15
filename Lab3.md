@@ -239,7 +239,7 @@ Om het script te laten uitvoeren door een gebruiker zijn er een aantal vereisten
 
 <div class="page-break"></div>
 
-### Installatie van programma's
+### Installatie van programma's (Moeilijke oefening - optioneel)
 
 Standaard hebben domeingebruikers geen rechten om programma’s te installeren op een pc. Vaak wil men echter toch kunnen toelaten dat de gebruiker bepaalde software kan installeren, zonder hem toe te laten om eender welke software te installeren. Ook hier kunnen GPO's gebruikt worden om in te stellen welke programma’s de gebruikers mag installeren op een client-pc.
 
