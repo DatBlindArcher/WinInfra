@@ -45,6 +45,31 @@ function Get-ByteSize {
     }
 }
 
+function Get-ByteSizeSwitch {
+    param (
+        [Parameter(Mandatory)] $Bytes
+    )
+
+    switch ($Bytes) {
+        # B
+        default {
+            $Bytes.ToString("F") + " B"
+        }
+        # KB
+        {$_ -ge 1024 -and $_ -lt 1024 * 1024} {
+            ($Bytes / 1024).ToString("F") + " KB"
+        }
+        # MB
+        {$_ -ge 1024 * 1024 -and $_ -lt 1024 * 1024 * 1024} {
+            ($Bytes / 1024 / 1024).ToString("F") + " MB"
+        }
+        # GB
+        {$_ -ge 1024 * 1024 * 1024 -and $_ -lt 1024 * 1024 * 1024 * 1024} {
+            ($Bytes / 1024/ 1024 / 1024).ToString("F") + " GB"
+        }
+    }
+}
+
 function Get-Factorial {
     param (
         [Parameter(Mandatory)] $n
@@ -59,9 +84,26 @@ function Get-Factorial {
     $result
 }
 
+function Get-AAAA {
+    param (
+        [Parameter(Mandatory)] $n
+    )
+
+    $result = ""
+
+    while ($result.Length -ne $n) {
+        $result += "A"
+    }
+
+    $result
+}
+
 #Show-FileTable "C:\Users\User"
 #Write-LargeFiles "C:\Users\User" "result.txt"
 #Show-Time
 #Get-ByteSize 1025
 #Get-ByteSize 1500000
-Get-Factorial 5
+#Get-ByteSizeSwitch 1025
+#Get-ByteSizeSwitch 1500000
+#Get-Factorial 5
+#Get-AAAA 4
