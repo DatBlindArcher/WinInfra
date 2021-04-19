@@ -1,1 +1,1 @@
-md-to-pdf Lab6.md --config-file config.js
+md-to-pdf Lab8.md --config-file config.js
